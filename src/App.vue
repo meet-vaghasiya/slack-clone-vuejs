@@ -1,8 +1,9 @@
+
 <script setup lang="ts">
 </script>
 
 <template>
-  Test
+     <div class="text-5xl text-red-500">hello world</div>
 </template>
 
 <style scoped>
