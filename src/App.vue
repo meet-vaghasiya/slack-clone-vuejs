@@ -3,7 +3,7 @@
 </script>
 
 <template>
-      <div class="text-5xl text-red-500">hello worldd</div>
+      <div class="text-5xl text-red-500">hello worlddd</div>
 </template>
 
 <style scoped></style>
