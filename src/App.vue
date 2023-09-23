@@ -3,7 +3,9 @@
 </script>
 
 <template>
-      <div class="text-5xl text-red-500">hello worlddd</div>
+      <div class="min-h-screen m-auto">
+            <router-view />
+      </div>
 </template>
 
 <style scoped></style>
