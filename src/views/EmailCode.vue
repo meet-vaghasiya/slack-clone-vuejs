@@ -36,10 +36,11 @@
                     <span class="text-base font-bold">slack</span>
                 </div>
                 <p class="text-4xl font-bold">Check your email for a code</p>
-                <p>We'have sent 6-digit code to <span class="font-bold">meet@gmail.com</span>. The code expires shorly, so
+                <p>We'have sent 6-digit code to <span class="font-bold">{{ store.email }}</span>. The code expires shorly,
+                    so
                     please enter it soon.</p>
                 <div class="flex mx-auto gap-x-3">
-                    <OtpInput @input="otpValue" />
+                    <OtpInput v-model="otp" />
                 </div>
                 <button class="flex items-center gap-1">
                     <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" class="w-6 h-6" viewBox="0 0 48 48">
@@ -66,8 +67,37 @@
 </template>
 
 <script lang="ts" setup>
+import axiosInstance from '../api/axios';
 import OtpInput from '../components/common/OtpInput.vue'
-import { ref } from 'vue'
-const otpValue = ref("")
+import { ref, watch } from 'vue'
+import { useUserStore } from '../stores/user';
+import { useRouter } from 'vue-router';
+const otp = ref("")
+const store = useUserStore()
+const router = useRouter()
+watch(otp, (newValue) => {
+    if (newValue.length === 6) {
+        validateOtp(newValue)
+    }
+})
+type ResponseType = {
+    message: string
+    token: string
+}
+const validateOtp = async (otp: string) => {
+    try {
+        const data = await axiosInstance.post<ResponseType>('/register/verify', {
+            email: store.email,
+            otp: otp
+        })
+        store.setUserToken(data.data.token)
+
+        router.push({ name: 'ProfileSetup' })
+
+    } catch (error) {
+        console.log(error, 'error')
+    }
+
+}
 
 </script>

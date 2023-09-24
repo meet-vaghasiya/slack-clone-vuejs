@@ -39,8 +39,9 @@
                 <p>Enter your workspace's Slack URL</p>
                 <div class="w-2/3 mx-auto ">
                     <input type="text" class="block w-full p-2 mb-3 border rounded-md outline-none border-link"
-                        v-model.trim="email" placeholder="Enter workspace email">
-                    <button class="block w-full p-1 mb-4 text-center text-text-primary bg-brand">Continue </button>
+                        v-model.trim="email" placeholder="Enter workspace email" @keydown.enter="handleSubmit">
+                    <button class="block w-full p-1 mb-4 text-center text-text-primary bg-brand"
+                        @click="handleSubmit">Continue </button>
                     <div class="flex flex-col gap-2">
                         <p class="text-xs">Don't know your workspace URL? <span class="font-semibold text-link">Find your
                                 workspaces</span>
@@ -75,6 +76,24 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue'
+import { useRouter } from 'vue-router';
+import axios from '@/api/axios';
+import { useUserStore } from '@/stores/user'
+
 const email = ref('')
+const userStore = useUserStore()
+const router = useRouter()
+
+const handleSubmit = async () => {
+    try {
+        const data = await axios.post('/signin', { email: email.value })
+        console.log(data, 'response')
+        userStore.setUserEmail(email.value)
+        router.push({ name: 'EmailCode' })
+
+    } catch (error) {
+        console.log(error, 'error handling')
+    }
+}
 
 </script>

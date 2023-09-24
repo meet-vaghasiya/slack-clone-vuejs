@@ -46,7 +46,7 @@ const handlePaste = (event: ClipboardEvent) => {
     for (let i = 0; i < props.length; i++) {
         otp.value[i] = pasteData[i] || '';
     }
-    emit('input', otp.value.join(''));
+    emit('update:modelValue', otp.value.join(''));
 };
 
 onMounted(() => {
