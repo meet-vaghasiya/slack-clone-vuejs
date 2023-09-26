@@ -8,7 +8,8 @@ export default {
     },
     colors: {
       white: "#fff",
-      brand: "#3F0E40",
+      black: "#000",
+      brand: { DEFAULT: "#3F0E40", dark: "#350D36" },
       link: "#36C5F0",
       text: {
         primary: "#FFFFFFB2",
