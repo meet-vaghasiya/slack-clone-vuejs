@@ -4,9 +4,21 @@ import axios from "axios";
 
 // const authStore = useUserStore();
 
-const axiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_BASE_URL || "http://localhost:8000/api",
+const axiosClient = axios.create({
+  baseURL: "http://localhost:8000/api",
 });
+
+axiosClient.interceptors.response.use(
+  function (response) {
+    // console.log("response");
+    return response;
+  },
+  function (error) {
+    // let res = error.response;
+    // console.error("errror");
+    // return Promise.reject(error);
+  }
+);
 
 // axiosInstance.interceptors.request.use((config) => {
 //   if (authStore.isAuthenticated) {
@@ -15,4 +27,4 @@ const axiosInstance = axios.create({
 //   return config;
 // });
 
-export default axiosInstance;
+export default axiosClient;

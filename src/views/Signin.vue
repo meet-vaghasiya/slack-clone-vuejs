@@ -35,11 +35,12 @@
                     </svg>
                     <span class="text-base font-bold">slack</span>
                 </div>
-                <p class="text-4xl font-bold">Sign in to your workspace</p>
+                <p class="text-4xl font-bold text-primary">Sign in to your workspace</p>
                 <p>Enter your workspace's Slack URL</p>
                 <div class="w-2/3 mx-auto ">
-                    <input type="text" class="block w-full p-2 mb-3 border rounded-md outline-none border-link"
-                        v-model.trim="email" placeholder="Enter workspace email" @keydown.enter="handleSubmit">
+                    <ValidateInput v-model="v$.email.$model"
+                        :input-attrs="{ type: 'text', placeholder: 'Enter workspace email' }" :errors="v$.email.$errors" />
+
                     <button class="block w-full p-1 mb-4 text-center text-text-primary bg-brand"
                         @click="handleSubmit">Continue </button>
                     <div class="flex flex-col gap-2">
@@ -79,20 +80,38 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router';
 import axios from '@/api/axios';
 import { useUserStore } from '@/stores/user'
+import useVuelidate from '@vuelidate/core';
+import { required, email as emailRule } from '@vuelidate/validators';
+import ValidateInput from '../components/common/ValidateInput.vue';
+import { isUniqueEmail } from '@/utility/helpers.vuelidate'
+
 
 const email = ref('')
 const userStore = useUserStore()
 const router = useRouter()
+const $externalResults = ref({})
 
-const handleSubmit = async () => {
+const rules = () => ({
+    email: { required, email, isUniqueEmail }
+})
+
+const v$ = useVuelidate(rules, { email }, { $autoDirty: true, $externalResults, $lazy: false })
+
+const handleSubmit = async (): Promise<void> => {
     try {
-        const data = await axios.post('/signin', { email: email.value })
-        console.log(data, 'response')
+        await axios.post('/signin', { email: email.value })
         userStore.setUserEmail(email.value)
         router.push({ name: 'EmailCode' })
 
     } catch (error) {
-        console.log(error, 'error handling')
+        if (error.response) {
+            $externalResults.value = error.response.data.errors
+        } else if (error.request) {
+            console.log("No response received:", error.request);
+        } else {
+            // Something else went wrong
+            console.log("Error:", error.message);
+        }
     }
 }
 
