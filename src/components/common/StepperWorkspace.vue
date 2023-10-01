@@ -2,10 +2,11 @@
     <div class="text-content-secondary">
         <h3 class="mb-8 text-xs font-semibold">Step {{ currentStep + 1 }} of {{ totalSteps }}</h3>
         <h1 class="mb-6 text-5xl font-bold text-black">{{ texts[currentStep].title }}</h1>
-        <h2 class="mb-8 text-base font-semibold" v-if="texts[currentStep].subtitle">{{ texts[currentStep].subtitle }}</h2>
+        <h2 class="mb-8 text-base font-semibold" v-if="texts[currentStep].subtitle">{{
+            texts[currentStep].subtitle }}</h2>
         <slot :currentStep="currentStep"></slot>
         <button class="block py-2 mt-20 text-white border-none outline-none px-14 rouded bg-brand"
-            @click="nextStep">Next</button>
+            @click="handleNextStep">Next</button>
     </div>
 </template>
 
@@ -13,8 +14,9 @@
 <script setup lang="ts">
 import { useStepper } from '@/hooks/stepper'
 const { currentStep, nextStep, totalSteps } = useStepper(4);
-import { defineEmits } from 'vue'
+import { defineEmits, ref } from 'vue'
 const emit = defineEmits();
+
 const texts = [
     {
         'title': "What's the name of your company or team?",
@@ -39,7 +41,8 @@ const texts = [
 // })
 
 const handleNextStep = () => {
-    emit('click:next', nextStep)
+    emit('click:next', currentStep.value, nextStep)
+
 }
 
 </script>

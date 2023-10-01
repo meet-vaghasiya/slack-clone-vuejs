@@ -38,7 +38,7 @@
                 <p class="text-4xl font-bold text-primary">Sign in to your workspace</p>
                 <p>Enter your workspace's Slack URL</p>
                 <div class="w-2/3 mx-auto ">
-                    <ValidateInput v-model="v$.email.$model"
+                    <ValidateInput @keydown.enter="handleSubmit" v-model="v$.email.$model"
                         :input-attrs="{ type: 'text', placeholder: 'Enter workspace email' }" :errors="v$.email.$errors" />
 
                     <button class="block w-full p-1 mb-4 text-center text-text-primary bg-brand"
@@ -83,7 +83,6 @@ import { useUserStore } from '@/stores/user'
 import useVuelidate from '@vuelidate/core';
 import { required, email as emailRule } from '@vuelidate/validators';
 import ValidateInput from '../components/common/ValidateInput.vue';
-import { isUniqueEmail } from '@/utility/helpers.vuelidate'
 
 
 const email = ref('')
@@ -92,10 +91,11 @@ const router = useRouter()
 const $externalResults = ref({})
 
 const rules = () => ({
-    email: { required, email, isUniqueEmail }
+    email: { required, emailRule }
 })
 
-const v$ = useVuelidate(rules, { email }, { $autoDirty: true, $externalResults, $lazy: false })
+
+const v$ = useVuelidate(rules, { email }, { $autoDirty: true })
 
 const handleSubmit = async (): Promise<void> => {
     try {
