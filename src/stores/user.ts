@@ -6,12 +6,32 @@ type User = Ref<{
   email: string;
   token: string;
 }>;
+type Member = {
+  id: number | null;
+  user_id: number | null;
+  workspace_id: number | null;
+  name: string;
+  is_admin: boolean | null;
+  avatar: string;
+};
+const defaultMember = localStorageUtility.getItem("member") || {};
+console.log(defaultMember, "default member");
 
 export const useUserStore = defineStore("user", () => {
   const user: User = ref({
     email: localStorageUtility.getItem("email") || "",
     token: localStorageUtility.getItem("token") || "",
   });
+
+  const member = ref<Member>({
+    member_id: null,
+    user_id: null,
+    workspace_id: null,
+    is_admin: null,
+    avatar: "",
+    ...defaultMember,
+  });
+
   const email: ComputedRef<string> = computed(() => user.value.email);
   const token: ComputedRef<string> = computed(() => user.value.token);
   const isAuthenticated: ComputedRef<boolean> = computed(
@@ -28,5 +48,21 @@ export const useUserStore = defineStore("user", () => {
     localStorageUtility.setItem("token", token);
   };
 
-  return { user, email, token, isAuthenticated, setUserEmail, setUserToken };
+  const setMember = (newMember: Member) => {
+    member.value = newMember;
+    localStorageUtility.setItem("member", newMember);
+  };
+
+  const hasMember = computed(() => !!member.value.id);
+
+  return {
+    user,
+    email,
+    token,
+    isAuthenticated,
+    setUserEmail,
+    setUserToken,
+    setMember,
+    hasMember,
+  };
 });

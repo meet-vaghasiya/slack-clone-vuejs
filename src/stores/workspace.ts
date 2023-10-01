@@ -27,5 +27,6 @@ export const useWorkspaceStore = defineStore("workspace", () => {
     localStorageUtility.setItem("workspace", newWorkspace);
   };
 
-  return { workspace, setWorkspace };
+  const id: string = computed(() => workspace.value.id);
+  return { id, workspace, setWorkspace };
 });

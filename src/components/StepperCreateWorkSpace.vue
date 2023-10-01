@@ -5,6 +5,33 @@
                 <ValidateInput type="text" v-model="name" :input-attrs="{ placeholder: ' Ex: Acme Marketing or Acme Co' }"
                     :errors="v$0.name.$errors" />
             </template>
+            <template v-if="currentStep == 1">
+                <div>
+                    <ValidateInput type="name" v-model="name1" :input-attrs="{ placeholder: 'Something' }"
+                        :errors="v$1.name1.$errors" />
+                    <p class="mb-4 font-semibold mt-14">Your profile photo (optional)</p>
+
+                    <FileUploader class="flex gap-x-3" @upload:file="avatar = $event"
+                        v-slot="{ handler, readUrl, metaData }">
+                        <CustomImage :src="readUrl" class="flex-shrink-0 rounded-lg h-36 aspect-square"
+                            alt="Profile photo" />
+                        <div>
+                            <p>Help your teammates know they're talking to right persion</p>
+                            <input type="file" accept="image/*" id="avatar" class="hidden" @change="handler">
+                            <label for="avatar"
+                                class="inline-block px-4 py-2 mt-4 border rounded cursor-pointer border-1">Upload
+                                Photo</label>
+                            <template v-if="v$1.avatar.errors">
+                                <p v-for="error in v$1.avatar.errors" :key="error.$uid"
+                                    class="ml-1 text-xs text-red-error ">{{
+                                        error.$message }}</p>
+                            </template>
+                        </div>
+                    </FileUploader>
+
+                </div>
+
+            </template>
         </StepperWorkspace>
     </div>
 </template>
@@ -22,14 +49,21 @@ import StepperWorkspace from './common/StepperWorkspace.vue';
 import { ref } from 'vue'
 import ValidateInput from './common/ValidateInput.vue';
 import axios from '@/api/axios';
+import { create as memberCreate } from '@/api/member';
+
 import { useUserStore } from '@/stores/user'
 import { useWorkspaceStore } from '@/stores/workspace'
+import CustomImage from './common/CustomImage.vue';
+import FileUploader from './common/FileUploader.vue';
 
 
-
-const userStore = useUserStore()
 const workspaceStore = useWorkspaceStore()
+const userStore = useUserStore()
+
+
+// todo: create seprate form for all of this
 const name = ref("")
+const avatar = ref("")
 const rules = () => ({
     name: { required, minLength: minLength(5) }
 })
@@ -48,7 +82,41 @@ const step0 = async () => {
     }
     return isValidate
 }
-const step1 = () => {
+
+
+
+// todo : all for step 1
+const name1 = ref("")
+const rules1 = () => ({
+    name1: { required, minLength: minLength(3) },
+    avatar: {}
+})
+const $externalResults = ref({})
+
+const v$1 = useVuelidate(rules1, { name1 }, { $autoDirty: true, $externalResults })
+
+const step1 = async () => {
+    if (v$1.value.$touch(), v$1.value.$invalid) return
+    const formData = new FormData()
+    formData.append('name', name1.value)
+    formData.append('avatar', avatar.value)
+    try {
+        const { data } = await memberCreate(workspaceStore.id, formData)
+        userStore.setMember(data.data)
+        console.log(data, 'all data')
+
+    } catch (error) {
+        if (error.response) {
+            $externalResults.value = error.response.data.errors
+
+            console.log(error.response.data.errors, 'external validatoin')
+        } else if (error.request) {
+            console.log("No response received:", error.request);
+        } else {
+            // Something else went wrong
+            console.log("Error:", error.message);
+        }
+    }
 
 }
 const handleNext = async (currentStep, next) => {

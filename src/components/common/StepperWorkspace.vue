@@ -13,10 +13,21 @@
 
 <script setup lang="ts">
 import { useStepper } from '@/hooks/stepper'
-const { currentStep, nextStep, totalSteps } = useStepper(4);
+import { useWorkspaceStore } from '@/stores/workspace'
+import { useUserStore } from '../../stores/user';
+const workspaceStore = useWorkspaceStore()
+const userStore = useUserStore()
+
 import { defineEmits, ref } from 'vue'
 const emit = defineEmits();
-
+const { currentStep, nextStep, totalSteps } = useStepper(4);
+const stepperRule = {
+    0: !!workspaceStore.id,
+    1: !!userStore.hasMember
+}
+while (stepperRule[currentStep.value] === true) {
+    nextStep()
+}
 const texts = [
     {
         'title': "What's the name of your company or team?",
