@@ -22,13 +22,6 @@
 <script setup lang="ts">
 import { ref, defineProps, watch, computed } from 'vue';
 
-type Props = {
-    src: string;
-    alt: string;
-    defaultImage?: string | null;
-    failedImage?: string | null;
-}
-
 const props = defineProps({
     src: {
         type: String,
@@ -41,12 +34,12 @@ const props = defineProps({
     defaultImage: {
         type: String,
         required: false,
-        default: 'assets/images/default.jpg'
+        default: '/assets/images/default.jpg'
     },
     failedImage: {
         type: String,
         required: false,
-        default: 'assets/images/failed-to-load.png'
+        default: '/assets/images/failed-to-load.png'
     }
 
 });

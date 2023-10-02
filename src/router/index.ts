@@ -6,11 +6,24 @@ import EmailCode from "@/views/EmailCode.vue";
 import ProfileSetup from "@/views/ProfileSetup.vue";
 import NotFound from "@/views/NotFound.vue";
 import AcceptInvitation from "@/views/AcceptInvitation.vue";
+import Main from "@/views/Main.vue";
+import { useWorkspaceStore } from "@/stores/workspace";
 
 const routes = [
   {
     path: "/",
     component: Home,
+    beforeEnter: (to, from, next) => {
+      const workspaceStore = useWorkspaceStore();
+
+      if (workspaceStore.id) {
+        next(`workspace/${workspaceStore.id}`);
+      } else {
+        next({ name: "Signin" });
+      }
+
+      next();
+    },
   },
   {
     path: "/signin",
@@ -36,6 +49,10 @@ const routes = [
     path: "/accept-invitation/:token",
     component: AcceptInvitation,
     name: "AcceptInvitation",
+  },
+  {
+    path: "/workspace/:id",
+    component: Main,
   },
   {
     path: "/:catchAll(.*)",
