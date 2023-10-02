@@ -7,12 +7,15 @@ import ProfileSetup from "@/views/ProfileSetup.vue";
 import NotFound from "@/views/NotFound.vue";
 import AcceptInvitation from "@/views/AcceptInvitation.vue";
 import Main from "@/views/Main.vue";
+import ChatWindow from "@/views/ChatWindow.vue";
+
 import { useWorkspaceStore } from "@/stores/workspace";
 
 const routes = [
   {
     path: "/",
     component: Home,
+
     beforeEnter: (to, from, next) => {
       const workspaceStore = useWorkspaceStore();
 
@@ -29,16 +32,25 @@ const routes = [
     path: "/signin",
     component: Signin,
     name: "Signin",
+    meta: {
+      template: "empty",
+    },
   },
   {
     path: "/signup",
     component: Singup,
     name: "Signup",
+    meta: {
+      template: "empty",
+    },
   },
   {
     path: "/email-code",
     component: EmailCode,
     name: "EmailCode",
+    meta: {
+      template: "empty",
+    },
   },
   {
     path: "/profile-setup",
@@ -55,8 +67,16 @@ const routes = [
     component: Main,
   },
   {
+    path: "/workspace/:id/chat-window/:memberId",
+    component: ChatWindow,
+    name: "ChatWindow",
+  },
+  {
     path: "/:catchAll(.*)",
     component: NotFound,
+    meta: {
+      template: "empty",
+    },
   },
   // Add more routes here
 ];
