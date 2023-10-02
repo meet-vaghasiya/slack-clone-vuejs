@@ -4,6 +4,9 @@ import Signin from "@/views/Signin.vue";
 import Singup from "@/views/Singup.vue";
 import EmailCode from "@/views/EmailCode.vue";
 import ProfileSetup from "@/views/ProfileSetup.vue";
+import NotFound from "@/views/NotFound.vue";
+import AcceptInvitation from "@/views/AcceptInvitation.vue";
+
 const routes = [
   {
     path: "/",
@@ -28,6 +31,15 @@ const routes = [
     path: "/profile-setup",
     component: ProfileSetup,
     name: "ProfileSetup",
+  },
+  {
+    path: "/accept-invitation/:token",
+    component: AcceptInvitation,
+    name: "AcceptInvitation",
+  },
+  {
+    path: "/:catchAll(.*)",
+    component: NotFound,
   },
   // Add more routes here
 ];

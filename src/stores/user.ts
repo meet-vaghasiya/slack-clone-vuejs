@@ -5,6 +5,10 @@ import localStorageUtility from "../utility/localstorage";
 type User = Ref<{
   email: string;
   token: string;
+  id: number;
+  is_verified: boolean;
+  created_at: string;
+  updated_at: string;
 }>;
 type Member = {
   id: number | null;
@@ -15,12 +19,14 @@ type Member = {
   avatar: string;
 };
 const defaultMember = localStorageUtility.getItem("member") || {};
+const defaultUser = localStorageUtility.getItem("user") || {};
 console.log(defaultMember, "default member");
 
 export const useUserStore = defineStore("user", () => {
   const user: User = ref({
     email: localStorageUtility.getItem("email") || "",
     token: localStorageUtility.getItem("token") || "",
+    ...defaultUser,
   });
 
   const member = ref<Member>({
@@ -48,9 +54,22 @@ export const useUserStore = defineStore("user", () => {
     localStorageUtility.setItem("token", token);
   };
 
+  const setUser = (user: User) => {
+    console.log("set user");
+    user.value = {
+      ...user.value,
+      ...user,
+    };
+    localStorageUtility.setItem("user", user.value);
+  };
+
   const setMember = (newMember: Member) => {
     member.value = newMember;
     localStorageUtility.setItem("member", newMember);
+  };
+
+  const logout = () => {
+    localStorageUtility.clearAll();
   };
 
   const hasMember = computed(() => !!member.value.id);
@@ -64,5 +83,7 @@ export const useUserStore = defineStore("user", () => {
     setUserToken,
     setMember,
     hasMember,
+    logout,
+    setUser,
   };
 });

@@ -83,6 +83,13 @@ watch(otp, (newValue) => {
 type ResponseType = {
     message: string
     token: string
+    user: {
+        id: number
+        email: string
+        is_vertified: boolean
+        created_at: string
+        updated_at: string
+    }
 }
 const validateOtp = async (otp: string) => {
     try {
@@ -91,6 +98,7 @@ const validateOtp = async (otp: string) => {
             otp: otp
         })
         store.setUserToken(data.data.token)
+        store.setUser(data.data.user)
 
         router.push({ name: 'ProfileSetup' })
 

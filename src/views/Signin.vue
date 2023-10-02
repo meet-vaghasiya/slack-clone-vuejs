@@ -84,9 +84,8 @@ import useVuelidate from '@vuelidate/core';
 import { required, email as emailRule } from '@vuelidate/validators';
 import ValidateInput from '../components/common/ValidateInput.vue';
 
-
-const email = ref('')
 const userStore = useUserStore()
+const email = ref(userStore.email)
 const router = useRouter()
 const $externalResults = ref({})
 
