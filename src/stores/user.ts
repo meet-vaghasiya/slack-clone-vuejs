@@ -29,7 +29,7 @@ export const useUserStore = defineStore("user", () => {
   });
 
   const member = ref<Member>({
-    member_id: null,
+    id: null,
     user_id: null,
     workspace_id: null,
     is_admin: null,
@@ -83,5 +83,6 @@ export const useUserStore = defineStore("user", () => {
     hasMember,
     logout,
     setUser,
+    member,
   };
 });
