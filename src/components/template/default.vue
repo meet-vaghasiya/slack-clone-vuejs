@@ -1,7 +1,7 @@
 <template>
-    <div class="flex flex-col h-screen">
+    <div class="flex flex-col h-screen overflow-hidden">
         <Header />
-        <div class="flex flex-1 h-full">
+        <div class="flex flex-1 main-container">
             <Sidebar v-bind="{ members }" class="w-64" />
             <slot />
         </div>
@@ -23,3 +23,9 @@ onBeforeMount(async () => {
 
 })
 </script>
+
+<style scoped>
+.main-container {
+    max-height: calc(100vh - 48px);
+}
+</style>

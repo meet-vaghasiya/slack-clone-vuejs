@@ -1,25 +1,31 @@
 <!-- ChatWindow.vue -->
 <template>
-    <div class="chat-window">
-        <h2>Chat</h2>
-        <ul>
-            <li v-for="(message, index) in messages" :key="index">
-                <strong>{{ message }}</strong>
+    <div class="overflow-y-auto chat-window" ref="scrollContainer">
+        <ul class="flex flex-col gap-y-2">
+            <li v-for="(message, index) in props.messages" :key="index">
+                <MessageBox v-bind="{ message }" />
             </li>
         </ul>
     </div>
 </template>
   
 <script setup lang="ts">
-import { ref } from 'vue';
-import { usePusher } from '../hooks/pusher';
+import MessageBox from '../components/common/MessageBox.vue';
+import { onMounted, ref } from 'vue';
+const props = defineProps({
+    messages: {
+        type: Array,
+        required: true
+    }
+})
 
-const { messages, addMessage } = usePusher('private-chat');
+const scrollContainer = ref(null)
 
-// const sendMessage = () => {
-//     // Logic to send a message
-//     // For example, you can use a form input to enter and send a message
-//     const message = 'New message from the user';
-//     // Send the message to your backend and then Pusher will broadcast it to other clients
-// };
+onMounted(() => {
+    console.log(scrollContainer.value.scrollHeight, 'pp')
+    if (scrollContainer.value) {
+        scrollContainer.value.scrollTop = scrollContainer.value.scrollHeight;
+    }
+})
+
 </script>

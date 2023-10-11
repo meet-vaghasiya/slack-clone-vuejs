@@ -4,18 +4,15 @@ import { ref, onMounted, onUnmounted } from "vue";
 import pusher from "../pusher.config";
 
 export function usePusher(channelName: string) {
-  const channel = pusher.subscribe("private-chat");
-  const messages = ref<string[]>(["test first"]);
+  const channel = pusher.subscribe(channelName);
+  const messages = ref<string[]>([]);
 
-  const addMessage = (message: string) => {
-    console.log(
-      "========================================================================================================================="
-    );
-    messages.value.push(message);
+  const addMessage = (message: Object) => {
+    console.log(message, "messagetesttest");
+    messages.value.push(message.message);
   };
 
   onMounted(() => {
-    console.log("mounteed called");
     channel.bind("App\\Events\\MessageEvent", addMessage);
   });
 

@@ -2,9 +2,18 @@
     <div class="my-2">
         <label v-if="props.label" v-bind="props.labelAttrs" for="" class="mb-1 font-bold text-content-label">{{ label
         }}</label>
-        <input type="text" class="w-full p-2 border rounded outline-none border-grey-border border-opacity-30 "
-            :class="[errors && errors.length ? 'border-red-error border-1 ring-red-error ring-1 ring-inset border-red-error placeholder:text-red-error' : 'focus:border-blue-focus focus:border-1 focus:ring-blue-focus focus:ring-1 ring-inset placeholder:text-content-secondary ']"
-            v-bind="inputAttrs" @input="handleInput" :value="modelValue">
+        <div class="relative">
+            <button @click="$emit('click:prefix', $event)" v-if="iconPrefix" class="absolute inset-y-0 left-2">
+                <SvgContainer :filename="iconPrefix" />
+            </button>
+            <input class="w-full gap-2 p-2 border rounded outline-none border-grey-border border-opacity-30 "
+                :class="[errors && errors.length ? 'border-red-error border-1 ring-red-error ring-1 ring-inset border-red-error placeholder:text-red-error' : 'focus:border-blue-focus focus:border-1 focus:ring-blue-focus focus:ring-1 ring-inset placeholder:text-content-secondary ', { 'pl-8': iconPrefix, 'pr-8': iconSuffix }]"
+                v-bind="inputAttrs" type="text" @input="handleInput" :value="modelValue">
+            <button v-if="iconSuffix" @click="$emit('click:suffix', $event)" class="absolute inset-y-0 right-2">
+                <SvgContainer :filename="iconSuffix" />
+            </button>
+
+        </div>
         <template v-if="!props.optional">
             <p v-for="error in errors" :key="error.$uid" class="ml-1 text-xs text-red-error ">{{ error.$message }}</p>
 
@@ -14,6 +23,9 @@
 
 <script setup lang="ts">
 import { defineProps, defineEmits } from 'vue';
+import InlineSvg from 'vue-inline-svg';
+import SvgContainer from './SvgContainer.vue';
+import SentMessageArrow from './svg/SentMessageArrow.vue';
 
 
 const props = defineProps({
@@ -37,6 +49,16 @@ const props = defineProps({
     errors: {
         type: Array,
         default: () => [],
+        required: false
+    },
+    iconSuffix: {
+        type: String,
+        default: '',
+        required: false
+    },
+    iconPrefix: {
+        type: String,
+        default: '',
         required: false
     }
 })

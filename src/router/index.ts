@@ -7,7 +7,7 @@ import ProfileSetup from "@/views/ProfileSetup.vue";
 import NotFound from "@/views/NotFound.vue";
 import AcceptInvitation from "@/views/AcceptInvitation.vue";
 import Main from "@/views/Main.vue";
-import ChatWindow from "@/views/ChatWindow.vue";
+import ChatMessages from "@/views/ChatMessages.vue";
 
 import { useWorkspaceStore } from "@/stores/workspace";
 
@@ -63,13 +63,13 @@ const routes = [
     name: "AcceptInvitation",
   },
   {
-    path: "/workspace/:id",
-    component: Main,
+    path: "/workspace/:id/messages/:receiverId",
+    component: ChatMessages,
+    name: "ChatMessages",
   },
   {
-    path: "/workspace/:id/chat-window/:memberId",
-    component: ChatWindow,
-    name: "ChatWindow",
+    path: "/workspace/:id",
+    component: Main,
   },
   {
     path: "/:catchAll(.*)",

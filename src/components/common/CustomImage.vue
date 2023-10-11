@@ -6,10 +6,8 @@
 
 
         <div v-if="loading" class="absolute inset-0 flex items-center justify-center ">
-            <!-- You can replace this with your loading indicator -->
             <div class="w-16 h-16 border-t-4 border-b-4 border-blue-500 rounded-full animate-spin"></div>
         </div>
-        <!-- Show original image if loaded successfully -->
         <img v-if="!error" :src="props.src" :alt="alt" class="object-cover w-full h-full duration-500 transition-blur"
             :class="[!loading ? 'blur-0' : 'blur-sm']" @load="handleImageLoad" @error="handleImageError" />
 
@@ -45,7 +43,7 @@ const props = defineProps({
 });
 
 
-const loading = ref(true);
+const loading = ref(false);
 const error = ref(false);
 console.log(props.src, 'props and src')
 const showDefaultImage = computed(() => !props.src)

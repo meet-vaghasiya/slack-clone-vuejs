@@ -20,10 +20,8 @@ type Member = {
 };
 const defaultMember = localStorageUtility.getItem("member") || {};
 const defaultUser = localStorageUtility.getItem("user") || {};
-
 export const useUserStore = defineStore("user", () => {
   const user: User = ref({
-    email: localStorageUtility.getItem("email") || "",
     token: localStorageUtility.getItem("token") || "",
     ...defaultUser,
   });
