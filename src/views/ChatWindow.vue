@@ -22,7 +22,6 @@ const props = defineProps({
 const scrollContainer = ref(null)
 
 onMounted(() => {
-    console.log(scrollContainer.value.scrollHeight, 'pp')
     if (scrollContainer.value) {
         scrollContainer.value.scrollTop = scrollContainer.value.scrollHeight;
     }

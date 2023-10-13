@@ -8,7 +8,6 @@ export function usePusher(channelName: string) {
   const messages = ref<string[]>([]);
 
   const addMessage = (message: Object) => {
-    console.log(message, "messagetesttest");
     messages.value.push(message.message);
   };
 

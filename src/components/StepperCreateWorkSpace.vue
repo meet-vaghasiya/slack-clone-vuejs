@@ -124,18 +124,17 @@ const step1 = async () => {
 
         const { data } = await memberCreate(workspaceStore.id, formData)
         userStore.setMember(data.data)
-        console.log(data, 'all data')
         return true
     } catch (error) {
         if (error.response) {
             $externalResults.value = error.response.data.errors
 
-            console.log(error.response.data.errors, 'external validatoin')
+            console.error(error.response.data.errors, 'external validatoin')
         } else if (error.request) {
-            console.log("No response received:", error.request);
+            console.error("No response received:", error.request);
         } else {
             // Something else went wrong
-            console.log("Error:", error.message);
+            console.error("Error:", error.message);
         }
         return false
     }
@@ -168,12 +167,12 @@ const step2 = async () => {
         if (error.response) {
             $externalResults.value = error.response.data.errors
 
-            console.log(error.response.data.errors, 'external validatoin')
+            console.error(error.response.data.errors, 'external validatoin')
         } else if (error.request) {
-            console.log("No response received:", error.request);
+            console.error("No response received:", error.request);
         } else {
             // Something else went wrong
-            console.log("Error:", error.message);
+            console.error("Error:", error.message);
         }
         return false
     }

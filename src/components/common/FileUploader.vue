@@ -41,7 +41,6 @@ const metaData = ref<MetadataType>({
 const handleFiles = (e: Event) => {
     const target = e.target as HTMLInputElement;
     const files = target.files;
-    console.log(files, 'files')
     if (!files || !files[0]) {
         console.error('No file here')
         return
@@ -68,19 +67,15 @@ const filePreview = (file) => {
 
 const handleDragOver = (e) => {
     isDragging.value = true
-    // console.log(e, 'drag over')
 }
 
 const handleDrop = (e) => {
     const file = e.dataTransfer.items[0].getAsFile()
     isDragging.value = false
-    console.log(file, 'drop file')
     filePreview(file)
 }
 const handleDragLeave = (e) => {
-    console.log('leave calling')
     isDragging.value = false
-    // console.log(e, 'drag leave')
 }
 
 </script>

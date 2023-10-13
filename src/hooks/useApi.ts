@@ -7,7 +7,6 @@ export function useApi(fn: Function, payload) {
   const fetchData = async () => {
     try {
       const res = await fn(payload);
-      console.log(res);
     } catch (e) {
       error.value = e;
     } finally {

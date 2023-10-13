@@ -24,10 +24,6 @@ class LocalStorageUtility {
   }
 }
 
-// window.addEventListener("storage", (e) => {
-//   console.log(e, "something is store");
-// });
-
 // Example usage:
 const localStorageUtility = new LocalStorageUtility();
 export default localStorageUtility;

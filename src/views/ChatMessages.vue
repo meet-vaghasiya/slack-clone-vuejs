@@ -41,7 +41,7 @@ const getAllMessages = async () => {
             });
         }
     } catch (error) {
-        console.log(error, 'error message')
+        console.error(error, 'error message')
     } finally {
         isLoading.value = false
     }
@@ -57,7 +57,7 @@ const sendMessage = async (e) => {
         addMessage({ message: data.data })
         message.value = ''
     } catch (e) {
-        console.log('Error', e)
+        console.error('Error', e)
     }
 
 }

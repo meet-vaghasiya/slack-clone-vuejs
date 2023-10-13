@@ -103,7 +103,7 @@ const validateOtp = async (otp: string) => {
         router.push({ name: 'ProfileSetup' })
 
     } catch (error) {
-        console.log(error, 'error')
+        console.error(error, 'error')
     }
 
 }

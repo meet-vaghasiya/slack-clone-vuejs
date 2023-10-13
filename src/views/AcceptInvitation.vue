@@ -18,12 +18,10 @@ const userStore = useUserStore()
 
 const token = route.params.token
 onBeforeMount(async () => {
-    console.log(token, 'token')
 
     try {
         const { data } = await verifyInvitation(token)
         workspaceStore.setWorkspace(data.workspace)
-        console.log(userStore.email, data.user.email, '==')
         if (userStore.email !== data.user.email) {
             // alert('should logout')
             userStore.logout()
@@ -32,7 +30,7 @@ onBeforeMount(async () => {
         }
 
     } catch (error) {
-        console.log(error, 'error')
+        console.error(error, 'error')
     }
 
 

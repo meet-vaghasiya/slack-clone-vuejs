@@ -31,12 +31,11 @@ onBeforeMount(async () => {
             isLoading.value = true
             const res = await getAuthUser()
             userStore.setUser(res.data.user)
-            console.log(res, 'ooo')
       } catch (error) {
             if (error.response && error.response.status === 401) {
                   userStore.logout()
             }
-            console.log(error.response, 'ppp')
+            console.error(error.response, 'ppp')
       } finally {
             isLoading.value = false
       }

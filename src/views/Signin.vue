@@ -106,10 +106,10 @@ const handleSubmit = async (): Promise<void> => {
         if (error.response) {
             $externalResults.value = error.response.data.errors
         } else if (error.request) {
-            console.log("No response received:", error.request);
+            console.error("No response received:", error.request);
         } else {
             // Something else went wrong
-            console.log("Error:", error.message);
+            console.error("Error:", error.message);
         }
     }
 }
