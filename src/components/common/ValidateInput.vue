@@ -8,8 +8,10 @@
             </button>
             <input class="w-full gap-2 p-2 border rounded outline-none border-grey-border border-opacity-30 "
                 :class="[errors && errors.length ? 'border-red-error border-1 ring-red-error ring-1 ring-inset border-red-error placeholder:text-red-error' : 'focus:border-blue-focus focus:border-1 focus:ring-blue-focus focus:ring-1 ring-inset placeholder:text-content-secondary ', { 'pl-8': iconPrefix, 'pr-8': iconSuffix }]"
-                v-bind="inputAttrs" type="text" @input="handleInput" :value="modelValue">
-            <button v-if="iconSuffix" @click="$emit('click:suffix', $event)" class="absolute inset-y-0 right-2">
+                v-bind="inputAttrs" type="text" @input="handleInput" :value="modelValue"
+                v-show-max-input-length="showMaxLength">
+            <button v-if="iconSuffix && showMaxLength === null" @click="$emit('click:suffix', $event)"
+                class="absolute inset-y-0 right-2">
                 <SvgContainer :filename="iconSuffix" />
             </button>
 
@@ -60,6 +62,11 @@ const props = defineProps({
         type: String,
         default: '',
         required: false
+    },
+    showMaxLength: {
+        type: Number,
+        required: false,
+        default: () => null
     }
 })
 
