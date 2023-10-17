@@ -7,22 +7,30 @@
 import { computed } from 'vue';
 import Logo from './svg/Logo.vue'
 import SentMessageArrow from './svg/SentMessageArrow.vue';
-interface Props {
-    filename: string
-}
-
-const props = defineProps<Props>()
+import Plus from './svg/Plus.vue';
+import Close from './svg/Close.vue';
+import Lock from './svg/Lock.vue'
+import Hash from './svg/Hash.vue'
+const props = defineProps({
+    filename: {
+        type: String,
+        required: true
+    }
+})
 const allAvailableComponent = computed(() => {
     return {
         Logo,
-        SentMessageArrow
+        SentMessageArrow,
+        Plus,
+        Close,
+        Lock,
+        Hash
     }
 })
 // const filePath = computed<string>(() => {
 //     // Use dynamic import to load the SVG file
 //     return import(`@/assets/svg/${props.filename}.svg`).then((module) => module.default);
 // });
-console.log('hello')
 
 </script>
 <style ></style>
