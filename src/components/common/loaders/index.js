@@ -1,3 +1,3 @@
 import Circular from "./Circular.vue";
-
-export { Circular };
+import CircularBars from "./CircularBars.vue";
+export { Circular, CircularBars };

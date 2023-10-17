@@ -4,7 +4,7 @@
     </div>
 </template>
   
-<style>
+<style scoped>
 .loader {
     display: flex;
     justify-content: center;
