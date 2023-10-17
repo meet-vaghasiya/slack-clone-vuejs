@@ -23,8 +23,8 @@
                             <slot name="footer">
                                 <button type="button"
                                     class="inline-flex justify-center px-4 py-2 ml-auto text-sm font-medium text-blue-900 bg-blue-100 border border-transparent rounded-md hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                                    @click="$emit('on:click', $event)">
-                                    Next
+                                    @click="$emit('on:click', $event)" :class="{ 'pointer-events-none': isLoading }">
+                                    {{ confirmText }}
                                 </button>
                             </slot>
                         </div>
@@ -50,14 +50,20 @@ const props = defineProps({
     modelValue: {
         type: Boolean,
         required: true
-    }
+    },
+    confirmText: {
+        type: String,
+        default: 'Next'
+    },
+    isLoading: Boolean
 })
 const emit = defineEmits()
 console.log(props.modelValue, 'props');
 
 function closeModal() {
-    console.log('close is calling')
+    emit('before:close')
     emit('update:modelValue', false)
+    emit('after:close')
 }
 function openModal() {
     emit('update:modelValue', true)

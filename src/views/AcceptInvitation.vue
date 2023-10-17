@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-import { verifyInvitation } from '@/api/member'
+import { verifyInvitation } from '@/api/members'
 import { useRoute, useRouter } from 'vue-router';
 import { onBeforeMount } from 'vue'
 

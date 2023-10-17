@@ -13,6 +13,5 @@ export function sendInvites(workspaceId: number, payload: Object) {
 }
 
 export function verifyInvitation(token: string) {
-  console.log("calling");
   return axiosClient.get(`/accept-invitation/${token}`);
 }

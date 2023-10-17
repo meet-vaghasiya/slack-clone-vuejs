@@ -69,7 +69,7 @@ import StepperWorkspace from './common/StepperWorkspace.vue';
 import { ref } from 'vue'
 import ValidateInput from './common/ValidateInput.vue';
 import axios from '@/api/axios';
-import { create as memberCreate, sendInvites } from '@/api/member';
+import { create as memberCreate, sendInvites } from '@/api/members';
 
 import { useUserStore } from '@/stores/user'
 import { useWorkspaceStore } from '@/stores/workspace'

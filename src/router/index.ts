@@ -8,7 +8,7 @@ import NotFound from "@/views/NotFound.vue";
 import AcceptInvitation from "@/views/AcceptInvitation.vue";
 import Main from "@/views/Main.vue";
 import ChatMessages from "@/views/ChatMessages.vue";
-
+import Test from "../views/Test.vue";
 import { useWorkspaceStore } from "@/stores/workspace";
 
 const routes = [
@@ -70,6 +70,10 @@ const routes = [
   {
     path: "/workspace/:id",
     component: Main,
+  },
+  {
+    path: "/test",
+    component: Test,
   },
   {
     path: "/:catchAll(.*)",

@@ -4,7 +4,7 @@
         <p v-if="isLoading"> Loading</p>
         <template v-else>
             <ChatWindow v-if="messages.length" v-bind="{ messages }" class="flex-1" />
-            <p v-else> No message Yet</p>
+            <p v-else class="flex-1"> No message Yet</p>
             <ValidateInput :input-attrs="{ placeholder: 'Message' }" v-model="message" icon-suffix="SentMessageArrow"
                 @click:suffix="sendMessage" @keydown.enter.prevent="sendMessage" />
         </template>

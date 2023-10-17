@@ -2,7 +2,6 @@
 
 import Pusher from "pusher-js";
 const token = JSON.parse(localStorage.getItem("token"));
-console.log(token, "token");
 const pusher = new Pusher(import.meta.env.VITE_PUSHER_KEY, {
   cluster: import.meta.env.VITE_PUSHER_CLUSTER,
   authEndpoint: `http://localhost:8000/api/broadcasting/auth`,

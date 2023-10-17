@@ -22,7 +22,7 @@ import { ref, defineProps, watch, computed } from 'vue';
 
 const props = defineProps({
     src: {
-        type: String,
+        type: [String, null],
         required: true
     },
     alt: {
@@ -45,7 +45,6 @@ const props = defineProps({
 
 const loading = ref(false);
 const error = ref(false);
-console.log(props.src, 'props and src')
 const showDefaultImage = computed(() => !props.src)
 const handleImageLoad = () => {
     loading.value = false;
