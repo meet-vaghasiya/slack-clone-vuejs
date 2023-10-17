@@ -16,15 +16,15 @@ import { ref } from 'vue';
 import { usePusher } from '../hooks/pusher';
 import ChatWindow from './ChatWindow.vue';
 import ValidateInput from '../components/common/ValidateInput.vue';
-import { create, list } from '../api/messages';
+import { create, list } from '../api/channel-messages';
 import { useUserStore } from '../stores/user';
 import { useRoute } from "vue-router";
 
 
 const route = useRoute();
-
-
-const { messages, addMessage } = usePusher(`private-chat.${route.params.receiverId}`);
+const isChannel = route.params.userOrChat === 'channel'
+console.log(isChannel, 'ischannge')
+const { messages, addMessage } = usePusher(`private-chat.${route.params.channelId}`, 'App\\Events\\ChatEvent');
 const message = ref<string>('')
 
 const userStore = useUserStore()
@@ -33,7 +33,7 @@ const isLoading = ref(true)
 const getAllMessages = async () => {
 
     try {
-        const { data } = await list(route.params.id, route.params.receiverId)
+        const { data } = await list(route.params.id, route.params.channelId)
         if (data && data.data && data.data.length > 0) {
             // Push new messages into the existing array
             data.data.forEach((newMessage) => {
@@ -52,8 +52,7 @@ const sendMessage = async (e) => {
     try {
         const { data } = await create({
             content: message.value,
-            receiver_id: route.params.receiverId,
-        }, route.params.id)
+        }, route.params.id, route.params.channelId)
         addMessage({ message: data.data })
         message.value = ''
     } catch (e) {

@@ -3,7 +3,7 @@
         <h2 class="text-lg text-white">Channels</h2>
         <ul class="mt-3">
             <li v-for="(channel, index) in channelsStore.channels" :key="channel.id">
-                <RouterLink :to="{ name: 'ChatMessages', params: { id: 3, receiverId: channel.id } }"
+                <RouterLink :to="{ name: 'ChannelMessage', params: { id: 3, channelId: channel.id } }"
                     exact-active-class="text-white rounded-md bg-link"
                     class="flex items-center px-2 py-1 my-1 overflow-hidden transition-all gap-x-2 hover:bg-link hover:text-white">
                     <SvgContainer :filename="channel.is_private ? 'Lock' : 'Hash'" />
@@ -20,7 +20,7 @@
         <h2 class="text-lg text-white">Members</h2>
         <ul class="mt-3">
             <li v-for="(member, index) in membersStore.members" :key="member.id">
-                <RouterLink :to="{ name: 'ChatMessages', params: { id: 3, receiverId: member.id } }"
+                <RouterLink :to="{ name: 'OneToOneMessage', params: { id: 3, receiverId: member.id } }"
                     exact-active-class="text-white rounded-md bg-link"
                     class="flex items-center px-2 py-1 my-1 overflow-hidden transition-all gap-x-2 hover:bg-link hover:text-white">
                     <CustomImage class="w-6 h-6 rounded-md 6" :src="member.avatar" />

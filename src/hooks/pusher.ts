@@ -3,7 +3,7 @@
 import { ref, onMounted, onUnmounted } from "vue";
 import pusher from "../pusher.config";
 
-export function usePusher(channelName: string) {
+export function usePusher(channelName: string, eventName) {
   const channel = pusher.subscribe(channelName);
   const messages = ref<string[]>([]);
 
@@ -12,11 +12,11 @@ export function usePusher(channelName: string) {
   };
 
   onMounted(() => {
-    channel.bind("App\\Events\\MessageEvent", addMessage);
+    channel.bind(eventName, addMessage);
   });
 
   onUnmounted(() => {
-    channel.unbind("App\\Events\\MessageEvent", addMessage);
+    channel.unbind(eventName, addMessage);
   });
 
   return { messages, addMessage };
