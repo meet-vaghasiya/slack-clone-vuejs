@@ -1,7 +1,10 @@
 import axiosClient from "./axios";
 
-export function list(workspaceId: number) {
-  return axiosClient.get(`workspaces/${workspaceId}/members`);
+export function list(workspaceId: number, query) {
+  return axiosClient.get(`workspaces/${workspaceId}/members`, {
+    params: query,
+    cancelPreviousRequests: true,
+  });
 }
 
 export function create(workspaceId: number, payload: Object) {

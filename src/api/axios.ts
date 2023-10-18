@@ -1,6 +1,6 @@
 // src/api/axios.ts
 import axios, { AxiosResponse } from "axios";
-
+import pusher from "../pusher.config";
 import { useUserStore } from "@/stores/user";
 const pendingRequests: { [key: string]: AbortController } = {};
 
@@ -41,6 +41,10 @@ axiosClient.interceptors.request.use((config) => {
     const abortController = new AbortController(); //create new AbortController
     config.signal = abortController.signal; // assign it's signal into request config
     pendingRequests[config.url] = abortController; // store AbortController in the pending requests map
+  }
+
+  if (pusher.connection) {
+    config.headers["X-Socket-ID"] = pusher.connection.socket_id;
   }
 
   return config;

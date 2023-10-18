@@ -21,13 +21,13 @@
                 <p class="text-lg font-semibold">Visibility</p>
                 <ul>
                     <li>
-                        <input id="public" type="radio" name="channel" :value="0" v-model="isPrivate">
+                        <input id="public" type="radio" name="channel" :value="false" v-model="isPrivate">
                         <label for="public" class="break-all ">
                             Public - anyone in <span class="font-bold break-all">{{ name }} </span>
                         </label>
                     </li>
                     <li>
-                        <input id="private" type="radio" name="channel" :value="1" v-model="isPrivate">
+                        <input id="private" type="radio" name="channel" :value="true" v-model="isPrivate">
                         <label for="private">
                             Private- only specific people
                         </label>
@@ -147,7 +147,6 @@ const handleClick = async () => {
         currentChannelId.value = data.data.id
         currentStep.value++
     } else {
-        console.log('pppppppppppppp')
         if (!(await v$3.value.$validate())) return
         const payload = {
             is_private: isPrivate.value,

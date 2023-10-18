@@ -22,8 +22,6 @@ import { useRoute } from "vue-router";
 
 
 const route = useRoute();
-const isChannel = route.params.userOrChat === 'channel'
-console.log(isChannel, 'ischannge')
 const { messages, addMessage } = usePusher(`private-chat.${route.params.channelId}`, 'App\\Events\\ChatEvent');
 const message = ref<string>('')
 

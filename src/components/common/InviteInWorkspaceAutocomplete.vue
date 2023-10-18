@@ -57,12 +57,11 @@ const props = defineProps({
     }
 })
 
-const handleChange = async () => {
-
+const handleChange = async (text: string) => {
     loading.value = true
     options.value = []
     try {
-        const { data } = await memberList(workspaceStore.id)
+        const { data } = await memberList(workspaceStore.id, { search: text })
         options.value = data.data
     } catch {
 
