@@ -16,6 +16,9 @@ export function list(workspaceId: number) {
 export function create(workspaceId: number, payload: Object) {
   return axiosClient.post(`workspaces/${workspaceId}/channels`, payload);
 }
+export function show(workspaceId: number, channelId: number) {
+  return axiosClient.get(`workspaces/${workspaceId}/channels/${channelId}`);
+}
 
 export function addMembers(
   workspaceId: number,

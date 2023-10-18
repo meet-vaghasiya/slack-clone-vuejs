@@ -1,12 +1,15 @@
 <!-- ChatWindow.vue -->
 <template>
-    <div class="flex flex-col flex-1 p-2 md:p-5">
+    <div class="flex flex-col flex-1 ">
         <p v-if="isLoading"> Loading</p>
         <template v-else>
-            <ChatWindow v-if="messages.length" v-bind="{ messages }" class="flex-1" />
-            <p v-else class="flex-1"> No message Yet</p>
-            <ValidateInput :input-attrs="{ placeholder: 'Message' }" v-model="message" icon-suffix="SentMessageArrow"
-                @click:suffix="sendMessage" @keydown.enter.prevent="sendMessage" />
+            <ChatHeader :profile-data="receiverData" />
+            <div class="flex flex-col flex-1 p-2 overflow-y-auto md:p-5">
+                <ChatWindow class="flex-1" v-if="messages.length" v-bind="{ messages }" />
+                <p v-else class="flex-1 "> No message Yet</p>
+                <ValidateInput :input-attrs="{ placeholder: 'Message' }" v-model="message" icon-suffix="SentMessageArrow"
+                    @click:suffix="sendMessage" @keydown.enter.prevent="sendMessage" />
+            </div>
         </template>
     </div>
 </template>
@@ -19,6 +22,8 @@ import ValidateInput from '../components/common/ValidateInput.vue';
 import { create, list } from '../api/messages';
 import { useUserStore } from '../stores/user';
 import { useRoute } from "vue-router";
+import { show } from '../api/members';
+import ChatHeader from '@common/ChatHeader.vue';
 
 
 const route = useRoute();
@@ -29,7 +34,17 @@ const message = ref<string>('')
 
 const userStore = useUserStore()
 const isLoading = ref(true)
+const receiverData = ref(null)
+const getUserInfo = async () => {
+    try {
+        const { data } = await show(route.params.id, route.params.receiverId)
+        receiverData.value = data.data
 
+    } catch (error) {
+
+    }
+}
+getUserInfo()
 const getAllMessages = async () => {
 
     try {

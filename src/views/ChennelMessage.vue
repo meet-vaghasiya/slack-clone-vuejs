@@ -1,12 +1,16 @@
 <!-- ChatWindow.vue -->
 <template>
-    <div class="flex flex-col flex-1 p-2 md:p-5">
+    <div class="flex flex-col flex-1">
         <p v-if="isLoading"> Loading</p>
         <template v-else>
-            <ChatWindow v-if="messages.length" v-bind="{ messages }" class="flex-1" />
-            <p v-else class="flex-1"> No message Yet</p>
-            <ValidateInput :input-attrs="{ placeholder: 'Message' }" v-model="message" icon-suffix="SentMessageArrow"
-                @click:suffix="sendMessage" @keydown.enter.prevent="sendMessage" />
+            <ChatHeader :profile-data="channelData" is-channel />
+
+            <div class="flex flex-col flex-1 p-2 overflow-y-auto md:p-5">
+                <ChatWindow v-if="messages.length" v-bind="{ messages }" class="flex-1" />
+                <p v-else class="flex-1"> No message Yet</p>
+                <ValidateInput :input-attrs="{ placeholder: 'Message' }" v-model="message" icon-suffix="SentMessageArrow"
+                    @click:suffix="sendMessage" @keydown.enter.prevent="sendMessage" />
+            </div>
         </template>
     </div>
 </template>
@@ -19,6 +23,8 @@ import ValidateInput from '../components/common/ValidateInput.vue';
 import { create, list } from '../api/channel-messages';
 import { useUserStore } from '../stores/user';
 import { useRoute } from "vue-router";
+import ChatHeader from '@common/ChatHeader.vue';
+import { show } from '../api/channels';
 
 
 const route = useRoute();
@@ -27,6 +33,17 @@ const message = ref<string>('')
 
 const userStore = useUserStore()
 const isLoading = ref(true)
+const channelData = ref(null)
+const getChannelInfo = async () => {
+    try {
+        const { data } = await show(route.params.id, route.params.channelId)
+        channelData.value = data.data
+
+    } catch (error) {
+        console.error({ error })
+    }
+}
+getChannelInfo()
 
 const getAllMessages = async () => {
 

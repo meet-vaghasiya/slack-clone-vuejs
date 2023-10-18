@@ -11,6 +11,8 @@ import Plus from './svg/Plus.vue';
 import Close from './svg/Close.vue';
 import Lock from './svg/Lock.vue'
 import Hash from './svg/Hash.vue'
+import DownArrow from './svg/DownArrow.vue'
+import AddDoc from './svg/AddDoc.vue'
 const props = defineProps({
     filename: {
         type: String,
@@ -24,7 +26,9 @@ const allAvailableComponent = computed(() => {
         Plus,
         Close,
         Lock,
-        Hash
+        Hash,
+        DownArrow,
+        AddDoc
     }
 })
 // const filePath = computed<string>(() => {
