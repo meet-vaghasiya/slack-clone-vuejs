@@ -1,46 +1,37 @@
 // src/api/axios.ts
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import pusher from "../pusher.config";
 import { useUserStore } from "@/stores/user";
-const pendingRequests: { [key: string]: AbortController } = {};
+const pendingRequests: Map<string, AbortController> = new Map();
 
-const removePendingRequest = (url: string | undefined, abort = false): void => {
-  // check if pendingRequests contains our request URL
-  if (url && pendingRequests[url]) {
-    // if we want to abort ongoing call, abort it
-    if (abort) {
-      pendingRequests[url].abort();
-    }
-    // remove the request URL from pending requests
-    delete pendingRequests[url];
+// Create an AbortController for a specific URL and store it in pendingRequests
+function createAbortController(url: string): AbortController {
+  const abortController = new AbortController();
+  pendingRequests.set(url, abortController);
+  return abortController;
+}
+
+// Remove a pending request and abort it if necessary
+function removePendingRequest(url: string): void {
+  if (pendingRequests.has(url)) {
+    const abortController = pendingRequests.get(url);
+    abortController?.abort();
+    pendingRequests.delete(url);
   }
-};
+}
 
-const axiosClient = axios.create({
-  baseURL: "http://localhost:8000/api",
-});
-
-axiosClient.interceptors.response.use((response: AxiosResponse) => {
-  removePendingRequest(response.request.responseURL);
-  return response;
-});
-
-axiosClient.interceptors.request.use((config) => {
-  const userStore = useUserStore(); // Replace with your actual store import
-
-  // set token
+function setAuthorizationHeader(config: AxiosRequestConfig): void {
+  const userStore = useUserStore();
   if (userStore.token) {
-    // Add the bearer token to the request headers
     config.headers.Authorization = `Bearer ${userStore.token}`;
   }
+}
 
-  // cancel token
-  if (config?.cancelPreviousRequests && config?.url && !config.signal) {
-    removePendingRequest(config.url, true);
-
-    const abortController = new AbortController(); //create new AbortController
-    config.signal = abortController.signal; // assign it's signal into request config
-    pendingRequests[config.url] = abortController; // store AbortController in the pending requests map
+// Handle request cancellation and include Pusher socket ID if connected
+function handleRequest(config: AxiosRequestConfig): AxiosRequestConfig {
+  if (config.cancelPreviousRequests && config.url && !config.signal) {
+    removePendingRequest(config.url);
+    config.signal = createAbortController(config.url).signal;
   }
 
   if (pusher.connection) {
@@ -48,6 +39,27 @@ axiosClient.interceptors.request.use((config) => {
   }
 
   return config;
+}
+
+const axiosClient = axios.create({
+  baseURL: "http://localhost:8000/api",
 });
+
+// Axios response interceptor to remove completed requests from the pending list
+axiosClient.interceptors.response.use((response: AxiosResponse) => {
+  removePendingRequest(response.config.url);
+  return response;
+});
+
+// Axios request interceptor to set headers and handle request cancellation
+axiosClient.interceptors.request.use(
+  (config: AxiosRequestConfig) => {
+    setAuthorizationHeader(config);
+    return handleRequest(config);
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
 
 export default axiosClient;
