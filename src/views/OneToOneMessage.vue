@@ -39,6 +39,10 @@ const apiDataArray = [
     { fn: show, params: [route.params.id, route.params.receiverId] },
     { fn: list, params: [route.params.id, route.params.receiverId] },
 ];
+const props = defineProps({
+    workspaceId: [String, Number]
+})
+console.log({ id: props.workspaceId }, 'pworkspaceId')
 
 const { loading } = useMultipleApi(apiDataArray, (err, data) => {
     if (!err) {

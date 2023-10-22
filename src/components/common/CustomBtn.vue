@@ -19,7 +19,7 @@ const textClassMap = {
     blue: 'text-blue',
     green: 'text-green',
     error: 'text-error',
-    secondary: 'text-secondary',
+    secondary: 'text-white',
     brand: 'text-brand'
 }
 const bgClassMap = {
@@ -77,6 +77,7 @@ const btnClasses = computed(() => {
         textColor = props.disabled ? 'text-grey-disabled' : `${textClassMap[props.variant]} hover:text-opacity-80`
     } else {
         bgColor = props.disabled ? 'bg-grey-disabled' : `${bgClassMap[props.variant]} hover:bg-opacity-80`
+        textColor = 'text-white'
     }
 
     if (props.outline) {

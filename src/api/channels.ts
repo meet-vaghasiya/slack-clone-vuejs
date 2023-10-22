@@ -1,6 +1,7 @@
 import axiosClient from "./axios";
 
 export function isValid(workspaceId: number, payload) {
+  console.log("hello world");
   return axiosClient.post(
     `workspaces/${workspaceId}/channels/is-valid`,
     payload,

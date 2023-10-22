@@ -68,15 +68,18 @@ const routes = [
     path: "/workspace/:id/users/:receiverId",
     component: OneToOneMessage,
     name: "OneToOneMessage",
+    props: (route) => ({ workspaceId: 5 }),
   },
   {
     path: "/workspace/:id/channel/:channelId",
     component: ChannelMessage,
     name: "ChannelMessage",
+    props: (route) => ({ workspaceId: 5 }),
   },
   {
     path: "/workspace/:id",
     component: Main,
+    props: true,
   },
   {
     path: "/test",
