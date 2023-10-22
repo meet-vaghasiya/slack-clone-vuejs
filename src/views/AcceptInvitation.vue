@@ -23,7 +23,6 @@ onBeforeMount(async () => {
         const { data } = await verifyInvitation(token)
         workspaceStore.setWorkspace(data.workspace)
         if (userStore.email !== data.user.email) {
-            // alert('should logout')
             userStore.logout()
             userStore.setUserEmail(data.user.email)
             router.push({ name: 'Signin' })

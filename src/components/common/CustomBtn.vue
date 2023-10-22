@@ -1,18 +1,18 @@
 <template>
-    <button class="flex items-center justify-center gap-x-2 min-w-[100px]"
+    <button class="flex items-center justify-center w-auto gap-x-2"
         :class="[btnClasses, { 'pointer-events-none': disabled || loading, '!p-2': icon }]">
-        <SvgContainer v-if="prependIcon" :filename="prependIcon" />
+        <Icon v-if="prependIcon" :name="prependIcon" />
 
         <CustomLoader v-if="loading" type="Circular" />
         <slot v-else />
-        <SvgContainer v-if="icon" :filename="icon" />
-        <SvgContainer v-if="appendIcon" :filename="appendIcon" />
+        <Icon v-if="icon" :name="icon" />
+        <Icon v-if="appendIcon" :name="appendIcon" />
     </button>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import SvgContainer from './SvgContainer.vue';
+import Icon from './Icon.vue';
 import CustomLoader from './CustomLoader.vue';
 
 const textClassMap = {
@@ -67,7 +67,7 @@ const props = defineProps({
 })
 
 const btnClasses = computed(() => {
-    let textColor = 'text-white';
+    let textColor = '';
     let bgColor = 'bg-transparent';
     let borderColor = '';
     let boxShadow = ''

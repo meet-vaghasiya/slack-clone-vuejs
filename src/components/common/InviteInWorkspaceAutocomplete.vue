@@ -36,7 +36,7 @@
 import { ref } from 'vue'
 import Multiselect from 'vue-multiselect'
 import ProfileSetup from '../../views/ProfileSetup.vue';
-import SvgContainer from './SvgContainer.vue';
+import Icon from './Icon.vue';
 // import 'vue-multiselect/dist/vue-multiselect.min.css'
 import { list as memberList } from "@/api/members"
 import { useWorkspaceStore } from "@/stores/workspace";

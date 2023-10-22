@@ -45,6 +45,7 @@ export default {
       grey: {
         border: "#1D1C1D",
         disabled: "#45444738",
+        light: "#F8F8F8",
       },
     },
 

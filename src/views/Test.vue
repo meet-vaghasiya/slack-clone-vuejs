@@ -5,8 +5,8 @@
         <CustomBtn outline>Hello</CustomBtn>
         <CustomBtn rounded="full" variant="secondary" disabled>Hello</CustomBtn>
         <CustomBtn variant="green" :loading="false">Hello</CustomBtn>
-        <CustomBtn prepend-icon="Plus" appendIcon="Plus"> Hello</CustomBtn>
-        <CustomBtn icon="Plus" flat rounded="full">Hello</CustomBtn>
+        <CustomBtn prepend-icon="plus" appendIcon="plus"> Hello</CustomBtn>
+        <CustomBtn icon="plus" flat rounded="full">Hello</CustomBtn>
     </div>
 </template>
 

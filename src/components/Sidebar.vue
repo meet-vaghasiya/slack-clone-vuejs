@@ -2,19 +2,20 @@
     <div class="p-2 text-white bg-brand text-opacity-70">
         <h2 class="text-lg text-white">Channels</h2>
         <ul class="mt-3">
-            <li v-for="(channel, index) in channelsStore.channels" :key="channel.id">
+            <li v-for="(channel) in channelsStore.channels" :key="channel.id">
                 <RouterLink :to="{ name: 'ChannelMessage', params: { id: 3, channelId: channel.id } }"
                     exact-active-class="text-white rounded-md bg-link"
                     class="flex items-center px-2 py-1 my-1 overflow-hidden transition-all gap-x-2 hover:bg-link hover:text-white">
-                    <SvgContainer :filename="channel.is_private ? 'Lock' : 'Hash'" />
+                    <Icon :name="channel.is_private ? 'lock' : 'hashtag-thick'" />
                     <button class=""> {{ channel.name }} </button>
 
                 </RouterLink>
             </li>
         </ul>
         <button class="flex items-center mt-3 mb-5 gap-x-2" @click="isChannelModelOpen = true">
-            <SvgContainer filename="Plus" class="p-1 bg-white rounded-md bg-opacity-20" />
-
+            <div class="p-1 bg-white rounded-md bg-opacity-20">
+                <Icon name="plus" />
+            </div>
             Add channels
         </button>
         <h2 class="text-lg text-white">Members</h2>
@@ -31,7 +32,9 @@
             </li>
         </ul>
         <button class="flex items-center mt-3 mb-5 gap-x-2">
-            <SvgContainer filename="Plus" class="p-1 bg-white rounded-md bg-opacity-20" />
+            <div class="p-1 bg-white rounded-md bg-opacity-20">
+                <Icon name="plus" />
+            </div>
 
             Add Members
         </button>
@@ -46,7 +49,7 @@
 <script setup lang="ts">
 import CustomImage from './common/CustomImage.vue';
 import { useUserStore } from '../stores/user';
-import SvgContainer from '@/components/common/SvgContainer.vue'
+import Icon from '@/components/common/Icon.vue'
 import CreateChannel from '@/components/common/models/CreateChannel.vue'
 import { ref, onBeforeMount } from 'vue'
 import { list as memberList } from "@/api/members"

@@ -14,10 +14,10 @@
                         <DialogTitle as="h3"
                             class="flex items-center justify-between text-2xl font-medium font-bold leading-6 text-gray-900">
                             <slot name="title" />
-                            <SvgContainer role="button" class="btn" filename="Close" @click="closeModal" />
+                            <Icon role="button" class="btn" name="close" @click="closeModal" />
                         </DialogTitle>
                         <div class="mt-5">
-                            <slot name="body" />
+                            <slot name="body" :close="closeModal" />
                         </div>
                         <div class="flex mt-10 ml-auto">
                             <slot name="footer">

@@ -7,7 +7,7 @@
             <div class="flex flex-col flex-1 p-2 overflow-y-auto md:p-5">
                 <ChatWindow class="flex-1" v-if="messages && messages.length" v-bind="{ messages }" />
                 <p v-else class="flex-1 "> No message Yet</p>
-                <ValidateInput :input-attrs="{ placeholder: 'Message' }" v-model="message" icon-suffix="SentMessageArrow"
+                <ValidateInput :input-attrs="{ placeholder: 'Message' }" v-model="message" icon-suffix="send-fill"
                     @click:suffix="sendMessage" @keydown.enter.prevent="!creating && sendMessage($event)"
                     :loading="creating" />
             </div>

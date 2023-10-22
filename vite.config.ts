@@ -11,6 +11,7 @@ export default defineConfig({
       "@loaders": path.resolve(__dirname, "src/components/common/loaders"),
       "@common": path.resolve(__dirname, "src/components/common"),
       "@api": path.resolve(__dirname, "src/api"),
+      "@hooks": path.resolve(__dirname, "src/hooks"),
     },
   },
 });
