@@ -7,9 +7,10 @@
             <div class="flex flex-col flex-1 p-2 overflow-y-auto md:p-5">
                 <ChatWindow class="flex-1" v-if="messages && messages.length" v-bind="{ messages }" />
                 <p v-else class="flex-1 "> No message Yet</p>
-                <ValidateInput :input-attrs="{ placeholder: 'Message' }" v-model="message" icon-suffix="send-fill"
-                    @click:suffix="sendMessage" @keydown.enter.prevent="!creating && sendMessage($event)"
-                    :loading="creating" />
+                <CustomQuill placeholder="Message" @keydown.enter.prevent="!sending && sendMessage($event)"
+                    :processing="sending" v-model="message" />
+                <!-- todo: modify design and send button -->
+
             </div>
         </template>
     </div>
@@ -27,6 +28,8 @@ import { show } from '../api/members';
 import ChatHeader from '@common/ChatHeader.vue';
 import { useApi } from "@hooks/useApi"
 import { useMultipleApi } from '../hooks/useApi';
+import CustomQuill from '@/components/common/Quill.vue'
+
 
 const route = useRoute();
 const isChannel = route.params.userOrChat === 'channel'
@@ -42,21 +45,19 @@ const apiDataArray = [
 const props = defineProps({
     workspaceId: [String, Number]
 })
-console.log({ id: props.workspaceId }, 'pworkspaceId')
 
 const { loading } = useMultipleApi(apiDataArray, (err, data) => {
     if (!err) {
         const [recData, messageData] = data
         receiverData.value = recData
         messageData.forEach((newMessage) => {
-            console.log(newMessage)
             addMessage({ message: newMessage });
         })
     }
 })
-const creating = ref(false)
+const sending = ref(false)
 const sendMessage = async (e) => {
-    creating.value = true
+    sending.value = true
     const { loading } = useApi(create, [{
         content: message.value,
         receiver_id: route.params.receiverId,
@@ -67,9 +68,8 @@ const sendMessage = async (e) => {
             message.value = ''
 
         }
-        creating.value = false
+        sending.value = false
     })
-    console.log(creating, 'loading')
 
 }
 

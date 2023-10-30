@@ -24,7 +24,7 @@
                 <RouterLink :to="{ name: 'OneToOneMessage', params: { id: 3, receiverId: member.id } }"
                     exact-active-class="text-white rounded-md bg-link"
                     class="flex items-center px-2 py-1 my-1 overflow-hidden transition-all gap-x-2 hover:bg-link hover:text-white">
-                    <CustomImage class="w-6 h-6 rounded-md 6" :src="member.avatar" />
+                    <CustomImage class="w-6 h-6 rounded-md 6" :src="member.avatar" alt="User avatar" />
                     <button class=""> {{ member.name }} </button>
                     <p class="inline-block px-1 ml-auto text-sm text-white rounded-sm bg-content-secondary"
                         v-if="member.id === userStore.member.id">me</p>

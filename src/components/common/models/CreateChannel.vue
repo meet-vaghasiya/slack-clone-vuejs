@@ -39,15 +39,6 @@ import ChannelVisibility from '@/components/channel/create/ChannelVisibility.vue
 import AddMembers from '@/components/channel/create/AddMembers.vue'
 import CustomBtn from '../CustomBtn.vue';
 
-
-const props = defineProps({
-    value: {
-        type: Boolean,
-        required: true
-    },
-
-})
-
 const channelName = ref(null)
 
 // get workspace id
