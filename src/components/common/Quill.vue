@@ -5,118 +5,120 @@
     </div>
 </template>
   
-<script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount, watch, toRefs, defineProps } from 'vue';
-import Quill from 'quill';
-import 'quill/dist/quill.snow.css';
-import "quill-mention";
-import * as Emoji from "quill-emoji";
-Quill.register("modules/emoji", Emoji);
+<script setup>
+import 'quill/dist/quill.core.css'
+import 'quill/dist/quill.snow.css'
+import 'quill/dist/quill.bubble.css'
+import Quill from 'quill'
+import { onMounted, ref, onBeforeUnmount, onUnmounted, watch } from 'vue'
 
-const emit = defineEmits()
-const props = defineProps({
-    modelValue: {
-        type: [String, null],
-        default: ''
-    }
-})
-
-const { modelValue } = toRefs(props)
-
-const editor = ref(null);
-let quill = null;
-const content = ref(null)
-const htmlContent = ref(null)
-
-watch(modelValue, (val) => {
-    if (val) {
-        quill.pasteHTML(val)
-    } else if (!val) {
-        quill.setText('')
-    }
-})
-
-const toolbarOptions = {
-    container: [
-        ['bold']
-    ]
-}
 const defaultOptions = {
     theme: 'snow',
-    placeholder: 'Insert content here ...'
+    placeholder: 'Insert content here ...',
+    readOnly: false,
 }
 
+const props = defineProps({
+    content: String,
+    modelValue: String,
+    disabled: {
+        type: Boolean,
+        default: false,
+    },
+    options: {
+        type: Object,
+        required: false,
+        default: () => ({}),
+    },
+})
 
+const emit = defineEmits()
 
-const handleTextChange = () => {
-    let html = editor.value.children[0].innerHTML
-    const text = quill.getText()
-    if (html === '<p><br></p>') html = ''
-    emit('update:modelValue', html)
+const state = {
+    editorOption: {},
+    quill: null
 }
+const editor = ref(null)
+const editorOption = ref({})
+const quill = ref(null)
 
-onMounted(() => {
-    quill = new Quill(editor.value, defaultOptions);
-    quill.on('text-change', handleTextChange)
-});
+const mergeOptions = (def, custom) => {
+    for (const key in custom) {
+        if (!def[key] || key !== 'modules') {
+            def[key] = custom[key]
+        } else {
+            mergeOptions(def[key], custom[key])
+        }
+    }
+    return def
+}
+watch(
+    () => props.modelValue,
+    val => {
+        if (state.quill) {
+            if (val) {
+                state.quill.pasteHTML(val)
+            } else if (!val) {
+                state.quill.setText('')
+            }
+        }
+    }
+)
+
+watch(
+    () => props.disabled,
+    val => {
+        if (state.quill) {
+            state.quill.enable(!val)
+        }
+    }
+)
+
+const initialize = () => {
+    if (editor.value) {
+        editorOption.value = mergeOptions(defaultOptions, props.options)
+        editorOption.value.readOnly = props.disabled ? true : false
+
+        quill.value = new Quill(editor.value, editorOption.value)
+
+        if (props.modelValue) {
+            quill.value.clipboard.dangerouslyPasteHTML(0, props.value)
+        }
+
+        quill.value.on('selection-change', (range) => {
+            if (!range) {
+                emit('blur', quill.value)
+            } else {
+                emit('focus', quill.value)
+            }
+        })
+
+        quill.value.on('text-change', () => {
+            if (props.disabled) {
+                quill.value.enable(false)
+            }
+            let html = editor.value.children[0].innerHTML
+            const text = quill.value.getText()
+            if (html === '<p><br></p>') html = ''
+            emit('update:modelValue', html)
+            emit('change', { html, text, quill: quill.value })
+        })
+    }
+}
 
 onBeforeUnmount(() => {
-    quill.off('text-change', handleTextChange);
-    quill = null;
-});
+    const editorToolbar = editor.value.previousSibling
+    if (editorToolbar && editorToolbar.nodeType === 1 && editorToolbar.className.indexOf('ql-toolbar') > -1) {
+        editorToolbar.parentNode.removeChild(editorToolbar)
+    }
+})
+
+onMounted(() => {
+    initialize()
+})
+
+onUnmounted(() => {
+    quill.value = null
+})
 </script>
-
-<!-- <style lang="scss">
-.custom-quill {
-    @apply border border-grey-border border-opacity-20 rounded-lg overflow-hidden;
-
-    .ql-formats {
-
-        >button {
-            @apply box-content p-1;
-        }
-
-        &:not(:last-child) {
-            border-right: 1px solid grey;
-            margin-right: 0;
-            padding-right: 15px;
-
-        }
-
-        &:not(:first-child) {
-            padding-left: 15px;
-        }
-
-    }
-
-    >* {
-        @apply border-none
-    }
-
-    .ql-container {
-        @apply border-none
-    }
-
-    .ql-toolbar {
-        @apply bg-grey-light border-none
-    }
-
-    button:hover {
-        @apply bg-grey-disabled rounded-lg
-    }
-
-    // .ql-snow .ql-stroke, .ql-fill {
-    //     @apply stroke-grey-icon hover:stroke-grey-border
-    // }
-
-    // button:hover {
-
-    //     .ql-snow .ql-stroke,
-    //     .ql-fill {
-    //         @apply stroke-grey-icon hover:stroke-grey-border
-    //     }
-    // }
-
-}
-</style> -->
   

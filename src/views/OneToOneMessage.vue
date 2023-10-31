@@ -4,13 +4,14 @@
         <p v-if="loading"> Loading</p>
         <template v-else>
             <ChatHeader :profile-data="receiverData" />
-            <div class="flex flex-col flex-1 p-2 overflow-y-auto md:p-5">
+            <div class="flex flex-col flex-1  p-2 overflow-y-auto md:p-5">
                 <ChatWindow class="flex-1" v-if="messages && messages.length" v-bind="{ messages }" />
                 <p v-else class="flex-1 "> No message Yet</p>
-                <CustomQuill placeholder="Message" @keydown.enter.prevent="!sending && sendMessage($event)"
+
+
+                <CustomQuill placeholder="Message" @keydown.enter.shift.exact.prevent="!sending && sendMessage($event)"
                     :processing="sending" v-model="message" />
                 <!-- todo: modify design and send button -->
-
             </div>
         </template>
     </div>
