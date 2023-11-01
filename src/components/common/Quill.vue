@@ -40,7 +40,7 @@ const state = {
 }
 const editor = ref(null)
 const editorOption = ref({})
-const quill = ref(null)
+let _content = '' //  This field is requied to track previous record , so while watcher we can't emit text-change if old and new content is same.
 
 const mergeOptions = (def, custom) => {
     for (const key in custom) {
@@ -55,8 +55,9 @@ const mergeOptions = (def, custom) => {
 watch(
     () => props.modelValue,
     val => {
-        if (state.quill) {
+        if (state.quill && val !== _content) {
             if (val) {
+                _content = val
                 state.quill.pasteHTML(val)
             } else if (!val) {
                 state.quill.setText('')
@@ -79,29 +80,30 @@ const initialize = () => {
         editorOption.value = mergeOptions(defaultOptions, props.options)
         editorOption.value.readOnly = props.disabled ? true : false
 
-        quill.value = new Quill(editor.value, editorOption.value)
+        state.quill = new Quill(editor.value, editorOption.value)
 
         if (props.modelValue) {
-            quill.value.clipboard.dangerouslyPasteHTML(0, props.value)
+            state.quill.clipboard.dangerouslyPasteHTML(0, props.value)
         }
 
-        quill.value.on('selection-change', (range) => {
+        state.quill.on('selection-change', (range) => {
             if (!range) {
-                emit('blur', quill.value)
+                emit('blur', state.quill)
             } else {
-                emit('focus', quill.value)
+                emit('focus', state.quill)
             }
         })
 
-        quill.value.on('text-change', () => {
+        state.quill.on('text-change', () => {
             if (props.disabled) {
-                quill.value.enable(false)
+                state.quill.enable(false)
             }
             let html = editor.value.children[0].innerHTML
-            const text = quill.value.getText()
-            if (html === '<p><br></p>') html = ''
+            const text = state.quill.getText()
+            if (html) html = html.replace(/<p><br><\/p>/g, '')
+            _content = html
             emit('update:modelValue', html)
-            emit('change', { html, text, quill: quill.value })
+            emit('change', { html, text, quill: state.quill })
         })
     }
 }
@@ -118,7 +120,7 @@ onMounted(() => {
 })
 
 onUnmounted(() => {
-    quill.value = null
+    state.quill = null
 })
 </script>
   
