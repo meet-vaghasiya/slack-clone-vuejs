@@ -1,5 +1,6 @@
 <template>
-    <div class="flex gap-x-3 relative group" @mouseenter="isVisible = true" @mouseleave="isVisible = false">
+    <div class="relative flex p-2 gap-x-3 group hover:bg-grey-light" @mouseenter="isVisible = true"
+        @mouseleave="isVisible = false">
         <CustomImage :src="props.message.member?.avatar" class="flex-shrink-0 w-10 h-10 rounded-md"
             :alt="`Avatar of ${props.message.member?.name}`" />
         <div>
@@ -14,21 +15,24 @@
         <TransitionRoot :show="isVisible" enter="transition-opacity duration-75" enter-from="opacity-0"
             enter-to="opacity-100" leave="transition-opacity duration-150" leave-from="opacity-100" leave-to="opacity-0">
             <ul
-                class="absolute  flex right-10 top-0 -translate-y-1/2 shadow-md ring-1  gap-x-2 items-center ring-grey-disabled px-2 py-2 rounded-md ">
+                class="absolute top-0 z-10 flex items-center px-3 py-2 -translate-y-1/2 bg-white rounded-md shadow-md right-10 ring-1 gap-x-3 ring-grey-disabled ">
                 <li>
-                    <icon class="text-content-secondary" name="add-emoji" />
+                    <icon role="button" class="text-content-secondary" name="add-emoji"
+                        v-tooltip="'Find another reaction'" />
                 </li>
                 <li>
-                    <icon class="text-content-secondary" name="reply" />
+                    <icon role="button" class="text-content-secondary" name="reply" v-tooltip="'Forward message'" />
                 </li>
                 <li>
-                    <icon class="text-content-secondary" name="bookmark" />
+                    <icon role="button" class="text-content-secondary" name="bookmark" v-tooltip="'Save for later'" />
                 </li>
                 <li>
-                    <icon class="text-content-secondary" name="three-dots-vertical" />
+                    <icon role="button" class="text-content-secondary" name="three-dots-vertical"
+                        v-tooltip="'More Action'" />
                 </li>
             </ul>
         </TransitionRoot>
+        <EmojiPicker :native="true" @select="onSelectEmoji" />
 
     </div>
 </template>
@@ -37,6 +41,10 @@
 import CustomImage from './CustomImage.vue';
 import { computed, ref } from 'vue'
 import { TransitionRoot } from '@headlessui/vue'
+import EmojiPicker from 'vue3-emoji-picker'
+import 'vue3-emoji-picker/css'
+
+
 
 const props = defineProps({
     message: {
@@ -45,6 +53,14 @@ const props = defineProps({
     }
 })
 const isVisible = ref(false)
+const search = ref('')
+
+const insert = (v) => {
+    console.log(v, 'v')
+}
+function onSelectEmoji(emoji) {
+    console.log(emoji)
+}
 
 const extractedTime = computed(() => {
     const dateObj = new Date(props.message.created_at)
